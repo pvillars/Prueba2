@@ -43,8 +43,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                 listener.startDetailEventById(event.getId());
             }
         });
+    }
 
-
+    public void addEvent(Event event){
+        events.add(event);
+        event.save();
+        notifyDataSetChanged();
     }
 
     @Override
@@ -61,6 +65,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
         public ViewHolder(View itemView) {
             super(itemView);
+
             nameTv = itemView.findViewById(R.id.nameTv);
             startDateTv = itemView.findViewById(R.id.startDateTv);
             eventRl = itemView.findViewById(R.id.eventRl);

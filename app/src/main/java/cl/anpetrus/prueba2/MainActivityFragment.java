@@ -10,8 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.Date;
-
 import cl.anpetrus.prueba2.adapters.ClickListener;
 import cl.anpetrus.prueba2.adapters.EventAdapter;
 import cl.anpetrus.prueba2.data.EventQuery;
@@ -43,21 +41,21 @@ public class MainActivityFragment extends Fragment implements ClickListener{
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        Event event;
-        event = new Event("Lucho Jara en Vivo","Gran Concierto gran",new Date(),new Date());
-        event.save();
-
-        event = new Event("Lucho Jara en Vivo2","Gran Concierto gran2",new Date(),new Date());
-        event.save();
-
-        event = new Event("Lucho Jara en Vivo3","Gran Concierto gran3",new Date(),new Date());
-        event.save();
-
-        event = new Event("Lucho Jara en Vivo4","Gran Concierto gran4",new Date(),new Date());
-        event.save();
-
-        event = new Event("Lucho Jara en Vivo5","Gran Concierto gran5",new Date(),new Date());
-        event.save();
+//        Event event;
+//        event = new Event("Lucho Jara en Vivo","Gran Concierto gran",new Date(),new Date());
+//        event.save();
+//
+//        event = new Event("Lucho Jara en Vivo2","Gran Concierto gran2",new Date(),new Date());
+//        event.save();
+//
+//        event = new Event("Lucho Jara en Vivo3","Gran Concierto gran3",new Date(),new Date());
+//        event.save();
+//
+//        event = new Event("Lucho Jara en Vivo4","Gran Concierto gran4",new Date(),new Date());
+//        event.save();
+//
+//        event = new Event("Lucho Jara en Vivo5","Gran Concierto gran5",new Date(),new Date());
+//        event.save();
 
         eventAdapter = new EventAdapter(new EventQuery().getAll(),this);
         recyclerView.setAdapter(eventAdapter);
@@ -72,5 +70,9 @@ public class MainActivityFragment extends Fragment implements ClickListener{
         Intent intent= new Intent(getContext(),EventActivity.class);
         intent.putExtra(EVENT_ID,id);
         startActivity(intent);
+    }
+
+    public void addToAdatperList(Event event){
+        eventAdapter.addEvent(event);
     }
 }
