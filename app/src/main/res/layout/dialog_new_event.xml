@@ -4,24 +4,87 @@
     android:layout_height="wrap_content"
     android:background="@color/colorPrimaryDark"
     android:gravity="center_vertical"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:padding="24dp">
 
     <EditText
         android:id="@+id/nameNewEt"
-        android:layout_width="0dp"
-        android:layout_height="45dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:background="@drawable/bg_white_bordered_primary"
+        android:hint="NOMBRE"
         android:inputType="text"
-        android:layout_weight="1"
         android:padding="8dp" />
 
-    <ImageButton
+    <EditText
+        android:id="@+id/descriptionNewEt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/bg_white_bordered_primary"
+        android:hint="DESCRIPCIÓN"
+        android:inputType="textMultiLine"
+        android:maxLines="3"
+        android:padding="8dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <EditText
+            android:id="@+id/dateStartEt"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_gravity="center"
+            android:layout_weight="3"
+            android:background="@android:color/white"
+            android:enabled="false" />
+
+        <Button
+            android:id="@+id/dateStartBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:text="FECHA" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <EditText
+            android:id="@+id/timeStartEt"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_gravity="center"
+            android:layout_weight="3"
+            android:background="@android:color/white"
+            android:enabled="false" />
+
+        <Button
+            android:id="@+id/timeStartBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:text="HORA" />
+
+    </LinearLayout>
+
+    <Button
         android:id="@+id/saveEventBtn"
-        android:layout_width="54dp"
-        android:layout_height="54dp"
-        android:scaleType="centerCrop"
-        android:src="@mipmap/ic_save_white_24dp"
-        android:theme="@style/AccentButton" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorAccent"
+        android:text="AGREGAR"
+        android:textColor="@android:color/white" />
 
 </LinearLayout>

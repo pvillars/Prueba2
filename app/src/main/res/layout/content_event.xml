@@ -10,19 +10,27 @@
     tools:showIn="@layout/activity_event">
 
     <TextView
+        android:gravity="center_horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/detailNameTv"/>
+        android:id="@+id/detailNameTv"
+        android:text="LUCHO JARA EN VIVO!!"
+        android:textSize="20sp"/>
+    <TextView
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/detailDescriptionTv"
+        android:text="Ven a disfrutar una agrade velaada Ven a disfrutar una agrade velaad Ven a disfrutar una agrade velaad, Ven a disfrutar una agrade velaadVen a disfrutar una agrade velaad Ven a disfrutar una agrade velaad Ven a disfrutar una agrade velaad"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/detailDescriptionTv"/>
+        android:id="@+id/detailDateStartTv"
+        android:text="01-04-2017"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/detailStartTv"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/detailEndTv"/>
+        android:id="@+id/detailTimeStartTv"
+        android:text="21:00 hrs"/>
+
 </LinearLayout>

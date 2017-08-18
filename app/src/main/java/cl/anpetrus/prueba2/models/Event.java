@@ -12,7 +12,6 @@ public class Event extends SugarRecord {
     private String name;
     private String description;
     private Date start;
-    private Date end;
 
     public Event() {
     }
@@ -21,7 +20,6 @@ public class Event extends SugarRecord {
         this.name = name;
         this.description = description;
         this.start = start;
-        this.end = end;
     }
 
     public String getName() {
@@ -48,11 +46,4 @@ public class Event extends SugarRecord {
         this.start = start;
     }
 
-    public Date getEnd() {
-        return end;
-    }
-
-    public void setEnd(Date end) {
-        this.end = end;
-    }
 }

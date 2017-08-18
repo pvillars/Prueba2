@@ -8,6 +8,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+
 import cl.anpetrus.prueba2.data.EventQuery;
 import cl.anpetrus.prueba2.models.Event;
 
@@ -31,16 +33,20 @@ public class EventActivity extends AppCompatActivity {
 
         TextView nameTv = (TextView) findViewById(R.id.detailNameTv);
         TextView descriptionTv = (TextView) findViewById(R.id.detailDescriptionTv);
-        TextView startTv = (TextView) findViewById(R.id.detailStartTv);
-        TextView endTv = (TextView) findViewById(R.id.detailEndTv);
+        TextView dateStartTv = (TextView) findViewById(R.id.detailDateStartTv);
+        TextView timeStartTv = (TextView) findViewById(R.id.detailTimeStartTv);
 
         long idEvent = getIntent().getLongExtra(MainActivityFragment.EVENT_ID,0L);
         Event event = new EventQuery().get(idEvent);
 
         getSupportActionBar().setTitle(event.getName());
         descriptionTv.setText(event.getDescription());
-        startTv.setText(event.getStart().toString());
-        endTv.setText(event.getEnd().toString());
+
+        String dateString = new SimpleDateFormat("dd-MM-yyyy").format(event.getStart());
+        String timeString = new SimpleDateFormat("HH:mm").format(event.getStart());
+
+        dateStartTv.setText(dateString);
+        timeStartTv.setText(timeString);
     }
 
 }
