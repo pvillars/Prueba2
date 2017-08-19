@@ -16,6 +16,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private MainActivityFragment mainActivityFragment;
 
     EditText dateStartEt, timeStartEt, nameTv,descriptionTv;
+    ImageView imageIv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
                 nameTv = dialog.findViewById(R.id.nameNewEt);
                 descriptionTv = dialog.findViewById(R.id.descriptionNewEt);
+                imageIv = dialog.findViewById(R.id.imageIv);
 
                 nameTv.setHint("NOMBRE");
                 descriptionTv.setHint("DESCRIPCIÓN");
@@ -140,6 +143,9 @@ public class MainActivity extends AppCompatActivity {
                                 event.setName(name);
                                 event.setDescription(description);
                                 event.setStart(startDateTime);
+                                imageIv.setDrawingCacheEnabled(true);
+                                imageIv.buildDrawingCache();
+                                event.setImage(ImageUtils.GetByteFromBitmap(imageIv.getDrawingCache()));
                                 mainActivityFragment.addToAdatperList(event);
                                 dialog.dismiss();
                             }

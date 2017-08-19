@@ -72,9 +72,17 @@
                 android:focusable="false"
                 android:paddingLeft="8dp" />
 
+
         </LinearLayout>
 
-
+        <ImageView
+            android:id="@+id/imageIv"
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:src="@mipmap/lucho_img"
+            android:scaleType="centerCrop"
+            />
         <Button
             android:id="@+id/saveEventBtn"
             android:layout_width="match_parent"

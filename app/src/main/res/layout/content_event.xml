@@ -9,6 +9,13 @@
     tools:context="cl.anpetrus.prueba2.EventActivity"
     tools:showIn="@layout/activity_event"
     android:padding="20dp">
+    <ImageView
+        android:scaleType="centerCrop"
+
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:id="@+id/detailImageIv"
+        android:layout_margin="16dp"/>
 
     <TextView
         android:gravity="center_horizontal"

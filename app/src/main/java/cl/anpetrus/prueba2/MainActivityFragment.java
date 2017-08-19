@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import cl.anpetrus.prueba2.adapters.ClickListener;
 import cl.anpetrus.prueba2.adapters.EventAdapter;
@@ -22,12 +24,16 @@ public class MainActivityFragment extends Fragment implements ClickListener{
 
     public static final String EVENT_ID = "cl.anpetrus.prueba2.KEY.EVENT_ID";
     private EventAdapter eventAdapter;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private EventQuery eventQuery;
+
     public MainActivityFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        eventQuery = new EventQuery();
         return inflater.inflate(R.layout.fragment_main, container, false);
     }
 
@@ -43,11 +49,39 @@ public class MainActivityFragment extends Fragment implements ClickListener{
 
         eventAdapter = new EventAdapter(new EventQuery().getNext(),this);
         recyclerView.setAdapter(eventAdapter);
+
+        swipeRefreshLayout = view.findViewById(R.id.reloadSr);
+
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Toast.makeText(getContext(), "RELOAD  >>>>>>", Toast.LENGTH_SHORT).show();
+                eventAdapter.reloadEvents(eventQuery.getNext());
+                swipeRefreshLayout.setRefreshing(false);
+               /* new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                },800);*/
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        swipeRefreshLayout.setRefreshing(true);
+        Toast.makeText(getContext(), "RELOAD  >>>>>> onResume", Toast.LENGTH_SHORT).show();
+        eventAdapter.reloadEvents(eventQuery.getAll());
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
     public void clicked() {
     }
+
 
     @Override
     public void startDetailEventById(Long id) {

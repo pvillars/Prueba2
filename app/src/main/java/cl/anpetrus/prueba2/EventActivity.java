@@ -6,6 +6,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -35,11 +36,14 @@ public class EventActivity extends AppCompatActivity {
         TextView descriptionTv = (TextView) findViewById(R.id.detailDescriptionTv);
         TextView dateStartTv = (TextView) findViewById(R.id.detailDateStartTv);
         TextView timeStartTv = (TextView) findViewById(R.id.detailTimeStartTv);
+        ImageView imageIv = (ImageView) findViewById(R.id.detailImageIv);
 
         long idEvent = getIntent().getLongExtra(MainActivityFragment.EVENT_ID,0L);
         Event event = new EventQuery().get(idEvent);
 
         getSupportActionBar().setTitle("Evento");
+
+        imageIv.setImageBitmap(ImageUtils.convertByteArrayToBitmap(event.getImage()));
 
         nameTv.setText(event.getName());
         descriptionTv.setText(event.getDescription());

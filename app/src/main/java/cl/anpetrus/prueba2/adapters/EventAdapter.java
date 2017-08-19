@@ -4,12 +4,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import cl.anpetrus.prueba2.ImageUtils;
 import cl.anpetrus.prueba2.R;
 import cl.anpetrus.prueba2.models.Event;
 
@@ -33,6 +35,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         return new ViewHolder(view);
     }
 
+
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final Event event = events.get(position);
@@ -41,6 +44,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         String timeStart = new SimpleDateFormat("HH:mm").format(event.getStart()) + " Hrs.";
 
         holder.startDateTv.setText(dateStart + " " + timeStart);
+        holder.imageIv.setImageBitmap(ImageUtils.convertByteArrayToBitmap(event.getImage()));
         holder.eventRl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -55,6 +59,11 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         notifyDataSetChanged();
     }
 
+    public void reloadEvents(List<Event> events){
+        this.events = events;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
         return events.size();
@@ -65,6 +74,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         private TextView nameTv;
         private TextView startDateTv;
         private RelativeLayout eventRl;
+        private ImageView imageIv;
 
 
         public ViewHolder(View itemView) {
@@ -73,6 +83,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             nameTv = itemView.findViewById(R.id.nameTv);
             startDateTv = itemView.findViewById(R.id.startDateTv);
             eventRl = itemView.findViewById(R.id.eventRl);
+            imageIv = itemView.findViewById(R.id.imageIv);
         }
     }
 }
