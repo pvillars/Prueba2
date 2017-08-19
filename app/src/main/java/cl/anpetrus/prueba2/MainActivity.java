@@ -16,7 +16,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -29,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
     private MainActivityFragment mainActivityFragment;
 
-    EditText dateStartEt,timeStartEt;
+    EditText dateStartEt, timeStartEt, nameTv,descriptionTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Eventos próximos");
 
         mainActivityFragment = (MainActivityFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
 
@@ -45,16 +48,30 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 final Dialog dialog = new Dialog(MainActivity.this);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.dialog_new_event);
 
-                Button dateStartBtn = dialog.findViewById(R.id.dateStartBtn);
-                Button timeStartBtn = dialog.findViewById(R.id.timeStartBtn);
+                TextView titleDialogTv = dialog.findViewById(R.id.titleDialogTv);
+                titleDialogTv.setText("NUEVO EVENTO");
+
+                nameTv = dialog.findViewById(R.id.nameNewEt);
+                descriptionTv = dialog.findViewById(R.id.descriptionNewEt);
+
+                nameTv.setHint("NOMBRE");
+                descriptionTv.setHint("DESCRIPCIÓN");
+
                 dateStartEt = dialog.findViewById(R.id.dateStartEt);
                 timeStartEt = dialog.findViewById(R.id.timeStartEt);
+                Date dateNow= new Date();
+                String dateString = new SimpleDateFormat("dd-MM-yyyy").format(dateNow);
+                String timeString = new SimpleDateFormat("HH:mm:ss").format(dateNow);
 
-                dateStartBtn.setOnClickListener(new View.OnClickListener() {
+                dateStartEt.setText(dateString);
+                timeStartEt.setText(timeString);
+
+                dateStartEt.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
@@ -73,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
                                     @Override
                                     public void onDateSet(DatePicker view, int year,
                                                           int monthOfYear, int dayOfMonth) {
-                                        dateStartEt.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                                        dateStartEt.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
 
                                     }
                                 }, year, month, day);
@@ -81,11 +98,11 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-                timeStartBtn.setOnClickListener(new View.OnClickListener() {
+                timeStartEt.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         hideKeyBoard(view);
-                        int hour,minute;
+                        int hour, minute;
                         // Get Current Time
                         final Calendar c = Calendar.getInstance();
                         hour = c.get(Calendar.HOUR_OF_DAY);
@@ -94,12 +111,12 @@ public class MainActivity extends AppCompatActivity {
                         // Launch Time Picker Dialog
                         TimePickerDialog timePickerDialog = new TimePickerDialog(MainActivity.this,
                                 new TimePickerDialog.OnTimeSetListener() {
-
                                     @Override
                                     public void onTimeSet(TimePicker view, int hourOfDay,
                                                           int minute) {
                                         timeStartEt.setText(hourOfDay + ":" + minute + ":00");
                                     }
+
                                 }, hour, minute, false);
                         timePickerDialog.show();
                     }
@@ -111,26 +128,29 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(View view) {
 
 
-                        EditText nameTv = dialog.findViewById(R.id.nameNewEt);
-                        String name = nameTv.getText().toString().trim();
+                        String name = nameTv.getText().toString();
+                        String description = descriptionTv.getText().toString();
+                        String dateString = dateStartEt.getText().toString() + " " + timeStartEt.getText().toString();
+                        Date startDateTime;
+                        try {
+                            startDateTime = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(dateString);
 
-                        if (name.length() > 0) {
-                            Event event = new Event();
-                            event.setName(name);
-                            event.setDescription("Description " + name);
-
-                            try {
-                                String dateString = dateStartEt.getText().toString()+" "+timeStartEt.getText().toString();
-                                Date startDateTime = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(dateString);
+                            if (isValidData(name,description,startDateTime)) {
+                                Event event = new Event();
+                                event.setName(name);
+                                event.setDescription(description);
                                 event.setStart(startDateTime);
-                            } catch (ParseException e) {
-                                e.printStackTrace();
+                                mainActivityFragment.addToAdatperList(event);
                                 dialog.dismiss();
                             }
-
-                            mainActivityFragment.addToAdatperList(event);
+                        } catch (ParseException e) {
+                            if(dateString.trim().length() <= 0){
+                                Toast.makeText(MainActivity.this, "Favor ingresar fecha y hora", Toast.LENGTH_LONG).show();
+                            }else{
+                                e.printStackTrace();
+                                Toast.makeText(MainActivity.this, "Error indesperado", Toast.LENGTH_LONG).show();
+                            }
                         }
-                        dialog.dismiss();
                     }
                 });
 
@@ -140,13 +160,30 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void hideKeyBoard(View view){
+    private void hideKeyBoard(View view) {
         try {
             InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         } catch (Exception e) {
             Log.e("ERROR", e.getMessage());
         }
+    }
+    private boolean isValidData( String name, String description, Date date){
+        if(name.trim().length()>0){
+            if(description.trim().length()>0){
+                if(date.after(new Date())){
+                    return true;
+                }else{
+                    Toast.makeText(this, "Favor ingresar fecha y hora posterior a la actual", Toast.LENGTH_LONG).show();
+                }
+            }else{
+                Toast.makeText(this, "Favor ingresar descripción", Toast.LENGTH_LONG).show();
+            }
+        }else{
+            Toast.makeText(this, "Favor ingresar nombre", Toast.LENGTH_LONG).show();
+        }
+
+        return false;
     }
 
 }

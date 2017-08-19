@@ -41,23 +41,7 @@ public class MainActivityFragment extends Fragment implements ClickListener{
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
 
-//        Event event;
-//        event = new Event("Lucho Jara en Vivo","Gran Concierto gran",new Date(),new Date());
-//        event.save();
-//
-//        event = new Event("Lucho Jara en Vivo2","Gran Concierto gran2",new Date(),new Date());
-//        event.save();
-//
-//        event = new Event("Lucho Jara en Vivo3","Gran Concierto gran3",new Date(),new Date());
-//        event.save();
-//
-//        event = new Event("Lucho Jara en Vivo4","Gran Concierto gran4",new Date(),new Date());
-//        event.save();
-//
-//        event = new Event("Lucho Jara en Vivo5","Gran Concierto gran5",new Date(),new Date());
-//        event.save();
-
-        eventAdapter = new EventAdapter(new EventQuery().getAll(),this);
+        eventAdapter = new EventAdapter(new EventQuery().getNext(),this);
         recyclerView.setAdapter(eventAdapter);
     }
 

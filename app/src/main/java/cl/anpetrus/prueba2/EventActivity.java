@@ -26,7 +26,7 @@ public class EventActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Futura acción para compartir", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -39,11 +39,13 @@ public class EventActivity extends AppCompatActivity {
         long idEvent = getIntent().getLongExtra(MainActivityFragment.EVENT_ID,0L);
         Event event = new EventQuery().get(idEvent);
 
-        getSupportActionBar().setTitle(event.getName());
+        getSupportActionBar().setTitle("Evento");
+
+        nameTv.setText(event.getName());
         descriptionTv.setText(event.getDescription());
 
         String dateString = new SimpleDateFormat("dd-MM-yyyy").format(event.getStart());
-        String timeString = new SimpleDateFormat("HH:mm").format(event.getStart());
+        String timeString = new SimpleDateFormat("HH:mm").format(event.getStart()) + " Hrs.";
 
         dateStartTv.setText(dateString);
         timeStartTv.setText(timeString);

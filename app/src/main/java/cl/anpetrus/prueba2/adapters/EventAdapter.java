@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import cl.anpetrus.prueba2.R;
@@ -36,7 +37,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final Event event = events.get(position);
         holder.nameTv.setText(event.getName());
-        holder.startDateTv.setText(event.getStart().toString());
+        String dateStart = new SimpleDateFormat("dd-MM-yyyy").format(event.getStart());
+        String timeStart = new SimpleDateFormat("HH:mm").format(event.getStart()) + " Hrs.";
+
+        holder.startDateTv.setText(dateStart + " " + timeStart);
         holder.eventRl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
