@@ -1,8 +1,10 @@
 package cl.anpetrus.prueba2;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
@@ -21,6 +23,7 @@ public class EventActivity extends AppCompatActivity {
 
     ImageView imageIv;
     boolean imageZoom;
+    FloatingActionButton fabZoomFake;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +45,8 @@ public class EventActivity extends AppCompatActivity {
         TextView dateStartTv = (TextView) findViewById(R.id.detailDateStartTv);
         TextView timeStartTv = (TextView) findViewById(R.id.detailTimeStartTv);
         imageIv = (ImageView) findViewById(R.id.detailImageIv);
+        fabZoomFake = (FloatingActionButton) findViewById(R.id.fabZoomFake);
+        fabZoomFake.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorBlack)));
 
         long idEvent = getIntent().getLongExtra(MainActivityFragment.EVENT_ID,0L);
         Event event = new EventQuery().get(idEvent);
@@ -54,6 +59,7 @@ public class EventActivity extends AppCompatActivity {
                     params.height = LinearLayout.LayoutParams.MATCH_PARENT;
                     params.width = LinearLayout.LayoutParams.MATCH_PARENT;
                     imageIv.setLayoutParams(params);
+                    fabZoomFake.setImageResource(R.mipmap.ic_zoom_out_white_24dp);
                     imageZoom=false;
                 }else{
                     DisplayMetrics metrics = new DisplayMetrics();
@@ -64,7 +70,7 @@ public class EventActivity extends AppCompatActivity {
                     params.width = LinearLayout.LayoutParams.MATCH_PARENT;
                     imageIv.setLayoutParams(params);
                     imageIv.setScaleType(ImageView.ScaleType.CENTER_CROP);
-
+                    fabZoomFake.setImageResource(R.mipmap.ic_zoom_in_white_24dp);
                     imageZoom = true;
                 }
                 }

@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -62,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
                 TextView titleDialogTv = dialog.findViewById(R.id.titleDialogTv);
                 titleDialogTv.setText("NUEVO EVENTO");
 
+                LinearLayout addEventLl = dialog.findViewById(R.id.addEventLl);
+
                 nameTv = dialog.findViewById(R.id.nameNewEt);
                 descriptionTv = dialog.findViewById(R.id.descriptionNewEt);
                 imageIv = dialog.findViewById(R.id.imageIv);
@@ -77,6 +80,15 @@ public class MainActivity extends AppCompatActivity {
 
                 dateStartEt.setText(dateString);
                 timeStartEt.setText(timeString);
+
+
+
+                addEventLl.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        hideKeyBoard(view);
+                    }
+                });
 
                 imageIv.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -159,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
                                 event.setImage(ImageUtils.GetByteFromBitmap(imageIv.getDrawingCache()));
                                 mainActivityFragment.addToAdatperList(event);
                                 getSupportActionBar().show();
+                                imageUri=null;
                                 dialog.dismiss();
                             }
                         } catch (ParseException e) {
@@ -191,7 +204,11 @@ public class MainActivity extends AppCompatActivity {
         if (name.trim().length() > 0) {
             if (description.trim().length() > 0) {
                 if (date.after(new Date())) {
-                    return true;
+                    if(imageUri != null){
+                        return true;
+                    }else{
+                        Toast.makeText(this, "Favor agrega una imagen", Toast.LENGTH_LONG).show();
+                    }
                 } else {
                     Toast.makeText(this, "Favor ingresar fecha y hora posterior a la actual", Toast.LENGTH_LONG).show();
                 }
@@ -208,16 +225,24 @@ public class MainActivity extends AppCompatActivity {
     private static final int PICK_IMAGE = 100;
 
     private void openGallery() {
-        Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-        startActivityForResult(gallery, PICK_IMAGE);
+        try {
+            Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+            startActivityForResult(gallery, PICK_IMAGE);
+        } catch (Exception e) {
+            Toast.makeText(this, "Problemas con la imagen, favor selecciona otra", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && requestCode == PICK_IMAGE) {
-            imageUri = data.getData();
-            imageIv.setImageURI(imageUri);
+        try {
+            if (resultCode == RESULT_OK && requestCode == PICK_IMAGE) {
+                imageUri = data.getData();
+                imageIv.setImageURI(imageUri);
+            }
+        } catch (Exception e) {
+            Toast.makeText(this, "Problemas con la imagen, favor selecciona otra", Toast.LENGTH_LONG).show();
         }
     }
 }

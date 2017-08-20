@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:background="@color/colorPrimaryDark"
     android:gravity="center_vertical"
+    android:id="@+id/addEventLl"
     android:orientation="vertical">
 
     <TextView
@@ -75,15 +76,17 @@
 
         </LinearLayout>
 <ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="200dp">
+    android:layout_width="wrap_content"
+    android:layout_height="200dp"
+    android:layout_gravity="center"
+    android:layout_marginTop="8dp">
         <ImageView
             android:id="@+id/imageIv"
             android:layout_marginTop="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@mipmap/lucho_img"
+            android:src="@mipmap/choose_image"
             />
 </ScrollView>
         <Button
