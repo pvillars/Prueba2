@@ -4,7 +4,10 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -32,8 +35,9 @@ public class MainActivity extends AppCompatActivity {
 
     private MainActivityFragment mainActivityFragment;
 
-    EditText dateStartEt, timeStartEt, nameTv,descriptionTv;
+    EditText dateStartEt, timeStartEt, nameTv, descriptionTv;
     ImageView imageIv;
+    Uri imageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                getSupportActionBar().hide();
                 final Dialog dialog = new Dialog(MainActivity.this);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.dialog_new_event);
@@ -67,12 +71,19 @@ public class MainActivity extends AppCompatActivity {
 
                 dateStartEt = dialog.findViewById(R.id.dateStartEt);
                 timeStartEt = dialog.findViewById(R.id.timeStartEt);
-                Date dateNow= new Date();
+                Date dateNow = new Date();
                 String dateString = new SimpleDateFormat("dd-MM-yyyy").format(dateNow);
                 String timeString = new SimpleDateFormat("HH:mm:ss").format(dateNow);
 
                 dateStartEt.setText(dateString);
                 timeStartEt.setText(timeString);
+
+                imageIv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        openGallery();
+                    }
+                });
 
                 dateStartEt.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -138,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             startDateTime = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(dateString);
 
-                            if (isValidData(name,description,startDateTime)) {
+                            if (isValidData(name, description, startDateTime)) {
                                 Event event = new Event();
                                 event.setName(name);
                                 event.setDescription(description);
@@ -147,12 +158,13 @@ public class MainActivity extends AppCompatActivity {
                                 imageIv.buildDrawingCache();
                                 event.setImage(ImageUtils.GetByteFromBitmap(imageIv.getDrawingCache()));
                                 mainActivityFragment.addToAdatperList(event);
+                                getSupportActionBar().show();
                                 dialog.dismiss();
                             }
                         } catch (ParseException e) {
-                            if(dateString.trim().length() <= 0){
+                            if (dateString.trim().length() <= 0) {
                                 Toast.makeText(MainActivity.this, "Favor ingresar fecha y hora", Toast.LENGTH_LONG).show();
-                            }else{
+                            } else {
                                 e.printStackTrace();
                                 Toast.makeText(MainActivity.this, "Error indesperado", Toast.LENGTH_LONG).show();
                             }
@@ -174,22 +186,38 @@ public class MainActivity extends AppCompatActivity {
             Log.e("ERROR", e.getMessage());
         }
     }
-    private boolean isValidData( String name, String description, Date date){
-        if(name.trim().length()>0){
-            if(description.trim().length()>0){
-                if(date.after(new Date())){
+
+    private boolean isValidData(String name, String description, Date date) {
+        if (name.trim().length() > 0) {
+            if (description.trim().length() > 0) {
+                if (date.after(new Date())) {
                     return true;
-                }else{
+                } else {
                     Toast.makeText(this, "Favor ingresar fecha y hora posterior a la actual", Toast.LENGTH_LONG).show();
                 }
-            }else{
+            } else {
                 Toast.makeText(this, "Favor ingresar descripción", Toast.LENGTH_LONG).show();
             }
-        }else{
+        } else {
             Toast.makeText(this, "Favor ingresar nombre", Toast.LENGTH_LONG).show();
         }
 
         return false;
     }
 
+    private static final int PICK_IMAGE = 100;
+
+    private void openGallery() {
+        Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        startActivityForResult(gallery, PICK_IMAGE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == PICK_IMAGE) {
+            imageUri = data.getData();
+            imageIv.setImageURI(imageUri);
+        }
+    }
 }
