@@ -1,4 +1,4 @@
-package cl.anpetrus.prueba2;
+package cl.anpetrus.prueba2.views.details;
 
 import android.content.res.ColorStateList;
 import android.os.Bundle;
@@ -13,17 +13,22 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 
+import cl.anpetrus.prueba2.R;
 import cl.anpetrus.prueba2.data.EventQuery;
 import cl.anpetrus.prueba2.models.Event;
+import cl.anpetrus.prueba2.utils.ImageUtil;
+import cl.anpetrus.prueba2.views.main.MainActivityFragment;
 
 public class EventActivity extends AppCompatActivity {
 
     ImageView imageIv;
     boolean imageZoom;
     FloatingActionButton fabZoomFake;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,8 +83,11 @@ public class EventActivity extends AppCompatActivity {
 
         getSupportActionBar().setTitle("Evento");
 
-
-        imageIv.setImageBitmap(ImageUtils.convertByteArrayToBitmap(event.getImage()));
+        try {
+            imageIv.setImageBitmap(ImageUtil.convertByteArrayToBitmap(event.getImage()));
+        } catch (Exception e) {
+            Toast.makeText(this, "Problemas al cargar poster", Toast.LENGTH_LONG).show();
+        }
 
         nameTv.setText(event.getName());
         descriptionTv.setText(event.getDescription());

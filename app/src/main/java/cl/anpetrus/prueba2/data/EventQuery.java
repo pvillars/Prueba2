@@ -11,14 +11,15 @@ import cl.anpetrus.prueba2.models.Event;
 
 public class EventQuery {
 
-    public List<Event> getAll(){
+    public List<Event> getAll() {
         return Event.listAll(Event.class);
     }
-    public List<Event> getNext(){
 
-        return Event.find(Event.class,"start >= ?", String.valueOf(new Date().getTime()));
+    public List<Event> getNext() {
+        return Event.find(Event.class, "start >= ?", String.valueOf(new Date().getTime()));
     }
-    public Event get(long id){
-        return Event.findById(Event.class,id);
+
+    public Event get(long id) {
+        return Event.findById(Event.class, id);
     }
 }

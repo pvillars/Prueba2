@@ -14,16 +14,6 @@ public class Event extends SugarRecord {
     private Date start;
     private byte[] image;
 
-    public byte[] getImage() {
-        return image;
-    }
-
-    public void setImage(byte[] image) {
-        this.image = image;
-    }
-
-
-
     public Event() {
     }
 
@@ -58,4 +48,11 @@ public class Event extends SugarRecord {
         this.start = start;
     }
 
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
 }

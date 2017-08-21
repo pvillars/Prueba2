@@ -1,4 +1,4 @@
-package cl.anpetrus.prueba2;
+package cl.anpetrus.prueba2.views.main;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -30,15 +30,17 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import cl.anpetrus.prueba2.R;
 import cl.anpetrus.prueba2.models.Event;
+import cl.anpetrus.prueba2.utils.ImageUtil;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int PICK_IMAGE_CODE = 100;
     private MainActivityFragment mainActivityFragment;
-
-    EditText dateStartEt, timeStartEt, nameTv, descriptionTv;
-    ImageView imageIv;
-    Uri imageUri;
+    private EditText dateStartEt, timeStartEt, nameTv, descriptionTv;
+    private ImageView imageIv;
+    private Uri imageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Eventos próximos");
 
         mainActivityFragment = (MainActivityFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
-
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -80,8 +81,6 @@ public class MainActivity extends AppCompatActivity {
 
                 dateStartEt.setText(dateString);
                 timeStartEt.setText(timeString);
-
-
 
                 addEventLl.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -127,14 +126,13 @@ public class MainActivity extends AppCompatActivity {
                 timeStartEt.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+
                         hideKeyBoard(view);
+
                         int hour, minute;
-                        // Get Current Time
                         final Calendar c = Calendar.getInstance();
                         hour = c.get(Calendar.HOUR_OF_DAY);
                         minute = c.get(Calendar.MINUTE);
-
-                        // Launch Time Picker Dialog
                         TimePickerDialog timePickerDialog = new TimePickerDialog(MainActivity.this,
                                 new TimePickerDialog.OnTimeSetListener() {
                                     @Override
@@ -153,14 +151,13 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
 
-
                         String name = nameTv.getText().toString();
                         String description = descriptionTv.getText().toString();
                         String dateString = dateStartEt.getText().toString() + " " + timeStartEt.getText().toString();
                         Date startDateTime;
+
                         try {
                             startDateTime = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(dateString);
-
                             if (isValidData(name, description, startDateTime)) {
                                 Event event = new Event();
                                 event.setName(name);
@@ -168,11 +165,15 @@ public class MainActivity extends AppCompatActivity {
                                 event.setStart(startDateTime);
                                 imageIv.setDrawingCacheEnabled(true);
                                 imageIv.buildDrawingCache();
-                                event.setImage(ImageUtils.GetByteFromBitmap(imageIv.getDrawingCache()));
-                                mainActivityFragment.addToAdatperList(event);
-                                getSupportActionBar().show();
-                                imageUri=null;
-                                dialog.dismiss();
+                                try {
+                                    event.setImage(ImageUtil.GetByteFromBitmap(imageIv.getDrawingCache()));
+                                    mainActivityFragment.addToAdatperList(event);
+                                    getSupportActionBar().show();
+                                    imageUri = null;
+                                    dialog.dismiss();
+                                } catch (Exception e) {
+                                    Toast.makeText(MainActivity.this, "Problemas con la imagen, favor selecciona otra", Toast.LENGTH_LONG).show();
+                                }
                             }
                         } catch (ParseException e) {
                             if (dateString.trim().length() <= 0) {
@@ -184,7 +185,6 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
-
                 dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
                 dialog.show();
             }
@@ -204,9 +204,9 @@ public class MainActivity extends AppCompatActivity {
         if (name.trim().length() > 0) {
             if (description.trim().length() > 0) {
                 if (date.after(new Date())) {
-                    if(imageUri != null){
+                    if (imageUri != null) {
                         return true;
-                    }else{
+                    } else {
                         Toast.makeText(this, "Favor agrega una imagen", Toast.LENGTH_LONG).show();
                     }
                 } else {
@@ -218,16 +218,13 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Favor ingresar nombre", Toast.LENGTH_LONG).show();
         }
-
         return false;
     }
-
-    private static final int PICK_IMAGE = 100;
 
     private void openGallery() {
         try {
             Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-            startActivityForResult(gallery, PICK_IMAGE);
+            startActivityForResult(gallery, PICK_IMAGE_CODE);
         } catch (Exception e) {
             Toast.makeText(this, "Problemas con la imagen, favor selecciona otra", Toast.LENGTH_LONG).show();
         }
@@ -237,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         try {
-            if (resultCode == RESULT_OK && requestCode == PICK_IMAGE) {
+            if (resultCode == RESULT_OK && requestCode == PICK_IMAGE_CODE) {
                 imageUri = data.getData();
                 imageIv.setImageURI(imageUri);
             }

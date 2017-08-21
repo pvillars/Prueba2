@@ -24,7 +24,7 @@
             android:value="cl.anpetrus.prueba2.models" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".views.main.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -34,7 +34,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".EventActivity"
+            android:name=".views.details.EventActivity"
             android:label="@string/title_activity_event"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
