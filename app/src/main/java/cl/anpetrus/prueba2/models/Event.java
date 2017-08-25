@@ -12,16 +12,14 @@ public class Event extends SugarRecord {
     private String name;
     private String description;
     private Date start;
-    private byte[] image;
 
     public Event() {
     }
 
-    public Event(String name, String description, Date start, Date end, byte[] image) {
+    public Event(String name, String description, Date start, Date end) {
         this.name = name;
         this.description = description;
         this.start = start;
-        this.image = image;
     }
 
     public String getName() {
@@ -48,11 +46,4 @@ public class Event extends SugarRecord {
         this.start = start;
     }
 
-    public byte[] getImage() {
-        return image;
-    }
-
-    public void setImage(byte[] image) {
-        this.image = image;
-    }
 }

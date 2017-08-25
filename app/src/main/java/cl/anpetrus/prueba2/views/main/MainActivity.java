@@ -4,10 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -19,7 +16,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -32,15 +28,11 @@ import java.util.Date;
 
 import cl.anpetrus.prueba2.R;
 import cl.anpetrus.prueba2.models.Event;
-import cl.anpetrus.prueba2.utils.ImageUtil;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int PICK_IMAGE_CODE = 100;
     private MainActivityFragment mainActivityFragment;
     private EditText dateStartEt, timeStartEt, nameTv, descriptionTv;
-    private ImageView imageIv;
-    private Uri imageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
 
                 nameTv = dialog.findViewById(R.id.nameNewEt);
                 descriptionTv = dialog.findViewById(R.id.descriptionNewEt);
-                imageIv = dialog.findViewById(R.id.imageIv);
 
                 nameTv.setHint("NOMBRE");
                 descriptionTv.setHint("DESCRIPCIÓN");
@@ -89,12 +80,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-                imageIv.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        openGallery();
-                    }
-                });
 
                 dateStartEt.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -163,13 +148,9 @@ public class MainActivity extends AppCompatActivity {
                                 event.setName(name);
                                 event.setDescription(description);
                                 event.setStart(startDateTime);
-                                imageIv.setDrawingCacheEnabled(true);
-                                imageIv.buildDrawingCache();
                                 try {
-                                    event.setImage(ImageUtil.GetByteFromBitmap(imageIv.getDrawingCache()));
                                     mainActivityFragment.addToAdatperList(event);
                                     getSupportActionBar().show();
-                                    imageUri = null;
                                     dialog.dismiss();
                                 } catch (Exception e) {
                                     Toast.makeText(MainActivity.this, "Problemas con la imagen, favor selecciona otra", Toast.LENGTH_LONG).show();
@@ -204,11 +185,7 @@ public class MainActivity extends AppCompatActivity {
         if (name.trim().length() > 0) {
             if (description.trim().length() > 0) {
                 if (date.after(new Date())) {
-                    if (imageUri != null) {
                         return true;
-                    } else {
-                        Toast.makeText(this, "Favor agrega una imagen", Toast.LENGTH_LONG).show();
-                    }
                 } else {
                     Toast.makeText(this, "Favor ingresar fecha y hora posterior a la actual", Toast.LENGTH_LONG).show();
                 }
@@ -221,25 +198,4 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-    private void openGallery() {
-        try {
-            Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-            startActivityForResult(gallery, PICK_IMAGE_CODE);
-        } catch (Exception e) {
-            Toast.makeText(this, "Problemas con la imagen, favor selecciona otra", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        try {
-            if (resultCode == RESULT_OK && requestCode == PICK_IMAGE_CODE) {
-                imageUri = data.getData();
-                imageIv.setImageURI(imageUri);
-            }
-        } catch (Exception e) {
-            Toast.makeText(this, "Problemas con la imagen, favor selecciona otra", Toast.LENGTH_LONG).show();
-        }
-    }
 }

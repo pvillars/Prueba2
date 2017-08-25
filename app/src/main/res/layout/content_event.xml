@@ -9,11 +9,6 @@
     tools:context="cl.anpetrus.prueba2.views.details.EventActivity"
     tools:showIn="@layout/activity_event">
 
-    <ImageView
-        android:id="@+id/detailImageIv"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:scaleType="centerCrop" />
 
     <ScrollView
         android:layout_width="match_parent"

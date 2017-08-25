@@ -10,18 +10,11 @@
     android:paddingRight="16dp"
     android:paddingTop="8dp">
 
-    <ImageView
-        android:id="@+id/imageIv"
-        android:layout_width="72dp"
-        android:layout_height="72dp"
-        android:layout_marginRight="8dp" />
-
     <TextView
         android:id="@+id/nameTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
-        android:layout_toRightOf="@+id/imageIv"
         android:textSize="16sp"
         android:textStyle="bold" />
 
@@ -30,7 +23,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/nameTv"
-        android:layout_toRightOf="@+id/imageIv"
         android:textSize="16sp" />
 
 </RelativeLayout>

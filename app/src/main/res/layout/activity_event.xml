@@ -32,15 +32,4 @@
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@mipmap/ic_share_white_24dp" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabZoomFake"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|left"
-        android:layout_margin="@dimen/fab_margin"
-        android:alpha="0.7"
-        app:layout_anchor="@+id/include"
-        app:layout_anchorGravity="top|right"
-        app:srcCompat="@mipmap/ic_zoom_in_white_24dp" />
-
 </android.support.design.widget.CoordinatorLayout>
